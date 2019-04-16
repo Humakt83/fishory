@@ -21,9 +21,20 @@ const RootQuery = new GraphQLObjectType({
       type: FishType,
       args: {id: { type: GraphQLString }},
       resolve(parent, args) {
-        const query = `SELECT * FROM fish where id=$1`;
+        const query = `SELECT * FROM fish WHERE id=$1`;
         return db
           .one(query, [args.id])
+          .then(res => res)
+          .catch(err => err);
+      }
+    },
+    searchFish: {
+      type: new GraphQLList(FishType),
+      args: {name: { type: GraphQLString }},
+      resolve(parent, args) {
+        const query = `SELECT * FROM fish WHERE name like '%${args.name}%'`;
+        return db
+          .many(query)
           .then(res => res)
           .catch(err => err);
       }
