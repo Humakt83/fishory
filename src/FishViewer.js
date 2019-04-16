@@ -9,6 +9,7 @@ export const GET_FISHES = gql`
       id
       name
       size
+      minimum_aquarium_size
     }
   }
 `;
@@ -19,11 +20,12 @@ export const SEARCH_FISH = gql`
       id
       name
       size
+      minimum_aquarium_size
     }
   }
 `;
 
-export default ({search}) => {
+export default ({search, minimumTankSize}) => {
   const queryToUse = search && search.trim().length > 2 ? SEARCH_FISH : GET_FISHES;
   return (<Query query={queryToUse} variables={{name: search}}>
     {({ loading, error, data }) => {
@@ -36,13 +38,17 @@ export default ({search}) => {
             <tr>
               <th>Name</th>
               <th>Size</th>
+              <th>Minimum Tank Size</th>
             </tr>
           </thead>
           <tbody>
-            {fishes.map(fish => (
+            {fishes
+              .filter(fish => !minimumTankSize || minimumTankSize <= fish.minimum_aquarium_size)
+              .map(fish => (
               <tr key={fish.id}>
                 <td>{fish.name}</td>
                 <td>{fish.size}</td>
+                <td>{fish.minimum_aquarium_size}</td>
               </tr>
             ))}
           </tbody>
