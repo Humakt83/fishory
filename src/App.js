@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Container } from 'reactstrap';
+import { Input, Container, Label } from 'reactstrap';
 
 import FishViewer from './FishViewer';
 
@@ -22,10 +22,12 @@ class App extends Component {
   render() {
     return (
       <Container fluid>
+        <Label>Search fish</Label>
         <Input
           type="text"
           value={this.state.search}
           onChange={this.changeSearch} />
+        <Label>Minimum tank size</Label>
         <Input
           type="number"
           value={this.state.minimumTankSize}
